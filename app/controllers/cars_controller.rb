@@ -1,10 +1,24 @@
 class CarsController < ApplicationController
-  before_action :set_car, only: [:show, :edit, :update, :destroy]
+  before_action :set_car, only: [:show, :edit, :update, :destroy, :claim]
+
+  def claim
+    if current_user
+      # @car.id = 7
+      #current_user.id = 3
+      #   update cars set user_id = 3 where id = 7
+      current_user.cars << @car
+      redirect_to root_path,
+        notice: "#{@car.make} #{@car.model} has been moved to your inventory."
+    else
+      redirect_to root_path,
+        notice: 'You must be logged in to claim a car'
+    end
+  end
 
   # GET /cars
   # GET /cars.json
   def index
-    @cars = Car.all
+    @cars = Car.where(user_id: nil)
   end
 
   # GET /cars/1
@@ -62,13 +76,13 @@ class CarsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_car
-      @car = Car.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_car
+    @car = Car.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def car_params
-      params.require(:car).permit(:make, :model, :year, :price)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def car_params
+    params.require(:car).permit(:make, :model, :year, :price)
+  end
 end
