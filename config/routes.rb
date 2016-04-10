@@ -4,8 +4,10 @@ Rails.application.routes.draw do
   get 'pages/about', as: 'about'
   get 'pages/contact', as: 'contact'
 
+
   get 'login' => 'sessions#login'
   post 'login' => 'sessions#create'
+  get '/my_cars' => 'cars#my_cars'
 
   delete 'logout' => 'sessions#destroy'
 

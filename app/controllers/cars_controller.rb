@@ -75,11 +75,18 @@ class CarsController < ApplicationController
     end
   end
 
+  def my_cars
+    @cars = Car.where(user_id: current_user.id)
+    render :index
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_car
     @car = Car.find(params[:id])
   end
+
+
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def car_params
